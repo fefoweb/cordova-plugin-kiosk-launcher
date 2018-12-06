@@ -3,10 +3,13 @@ package org.cordova.plugin.labs.kiosk;
 import android.content.Intent;
 import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.os.Process;
 import org.apache.cordova.*;
 import android.widget.*;
 import org.json.JSONArray;
 import org.cordova.plugin.labs.kiosk.KioskActivity;
+import java.lang.Integer;
+import java.util.HashSet;
 
 public class Kiosk extends CordovaPlugin {
 
@@ -14,17 +17,21 @@ public class Kiosk extends CordovaPlugin {
     public static final String SWITCH_LAUNCHER = "switchLauncher";
     public static final String IS_IN_KIOSK = "isInKiosk";
     public static final String IS_SET_AS_LAUNCHER = "isSetAsLauncher";
+    public static final String SET_KEYS_RUNNING = "setKeysRunning";
+    public static final String SET_FULLSCREEN = "setFullscreen";
+    public static final String KILL_KIOSK = "killKiosk";
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) {
         try {
             if (IS_IN_KIOSK.equals(action)) {
-
                 callbackContext.success(Boolean.toString(KioskActivity.kioskModeEnabled));
                 return true;
-
+            } else if (KILL_KIOSK.equals(action)) {
+                android.os.Process.killProcess(android.os.Process.myPid());
+                callbackContext.success();
+                return true;        
             } else if (IS_SET_AS_LAUNCHER.equals(action)) {
-
                 String myPackage = cordova.getActivity().getApplicationContext().getPackageName();
                 callbackContext.success(Boolean.toString(myPackage.equals(findLauncherPackageName())));
                 return true;
@@ -43,6 +50,20 @@ public class Kiosk extends CordovaPlugin {
                     cordova.getActivity().startActivity(chooser);
                 }
 
+                callbackContext.success();
+                return true;
+            } else if (SET_KEYS_RUNNING.equals(action)) {
+                System.out.println("setKeysRunning: " + args.toString());
+                HashSet<Integer> runningKeys = new HashSet<Integer>();
+                for (int i = 0; i < args.length(); i++) {
+                    runningKeys.add(args.optInt(i));
+                }
+                KioskActivity.runningKeys = runningKeys;
+                
+                callbackContext.success();
+                return true;
+            } else if (SET_FULLSCREEN.equals(action)) {
+                KioskActivity.inFullscreen = args.getBoolean(0);
                 callbackContext.success();
                 return true;
             }

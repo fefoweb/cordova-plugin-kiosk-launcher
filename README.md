@@ -19,10 +19,13 @@ This plugin has only been tested in Cordova 3.2 or greater, and its use in previ
 
 - [Installation](#installation)
 - [Methods](#methods)
-    - [Kiosk.setKiosEnabled](#kioskSetKioskEnabled)
+    - [Kiosk.setKioskEnabled](#kioskSetKioskEnabled)
     - [Kiosk.switchLauncher](#kioskSwitchLauncher)
     - [Kiosk.isInKiosk](#kioskIsInKiosk)
     - [Kiosk.isSetAsLauncher](#kioskIsSetAsLauncher)
+    - [Kiosk.setKeysRunning](#kioskSetKeysRunning)
+    - [Kiosk.setFullscreen](#kioskSetFullscreen)
+    - [Kiosk.killKiosk](#kioskKillKiosk)
 - [Releases](#releases)
 
 # Installation
@@ -38,11 +41,11 @@ From github latest (may not be stable)
 
 # Methods
 
-## Kiosk.setKiosEnabled
+## Kiosk.setKioskEnabled
 
 Enables/disables kiosk mode and
 
-    Kiosk.setKiosEnabled(boolean);
+    Kiosk.setKioskEnabled(boolean);
 
 
 ## Kiosk.switchLauncher
@@ -58,13 +61,42 @@ Checks to see if the app is running in kiosk mode
 
     Kiosk.isInKiosk(function(isInKiosk){ ... })
 
+
 ## Kiosk.isSetAsLauncher
 
 Checks to see if the app is set as a launcher
 
     Kiosk.isSetAsLauncher(function(isSetAsLauncher){ ... })
 
+
+## Kiosk.setKeysRunning
+
+Keycode whose event propagation should not be prevented - Brightness up/down is now allowed, other prevented
+
+    Kiosk.setKeysRunning([220, 221])  //KEYCODE_BRIGHTNESS_DOWN, KEYCODE_BRIGHTNESS_UP
+
+[Android Keycode review](https://developer.android.com/reference/android/view/KeyEvent#KEYCODE_0)
+
+
+## Kiosk.setFullscreen
+
+Enable/Disable fullscreen mode over kiosk mode
+
+    Kiosk.setFullscreen(true)  // enabled fullscreen mode
+
+
+## Kiosk.killKiosk
+
+KillApp from exit Kiosk Mode
+
+    Kiosk.killKiosk()
+
 # Releases
+- 1.2.0
+    - Added keys[] enabled to have action in kioskMode
+    - Added option for fullscreen mode hiding status bar
+    - Added killKiosk to KillApp from exit Kiosk Mode
+    - Remove bug on kiosk.js for android 4+ - 'Uncaught SyntaxError: Unexpected token ('
 - 1.0.3
     - Removes fullscreen bug
 - 1.0.2

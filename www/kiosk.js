@@ -1,7 +1,7 @@
 var exec = require("cordova/exec");
 
 var Kiosk = {
-  setKioskEnabled(enabled) {
+  setKioskEnabled: function(enabled) {
     exec(null, null, "Kiosk", "setKioskEnabled", [!!enabled]);
   },
 
@@ -35,6 +35,26 @@ var Kiosk = {
       "isSetAsLauncher",
       []
     );
+  }, 
+
+  setKeysRunning: function (keyCodes) {
+    exec(
+      null, 
+      function (error) {
+        alert("Kiosk.setKeysRunning failed: " + error);
+      }, 
+      "Kiosk", 
+      "setKeysRunning", 
+      keyCodes);
+  }, 
+
+  setFullscreen: function(isFullscreen) {
+    exec(null, null, "Kiosk", "setFullscreen", [!!isFullscreen]);
+  },
+
+  killKiosk: function () {
+    exec(null, null, "Kiosk", "killKiosk", []);
+    exec(null, null, "Kiosk", "switchLauncher", []);
   }
 };
 
